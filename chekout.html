@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f5f7fb
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .2)
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px
+        }
+
+        button {
+            background: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer
+        }
+
+        .back {
+            text-align: center;
+            color: #007bff;
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Delivery Details</h2>
+        <input id="name" placeholder="Full Name">
+        <input id="pin" placeholder="PIN Code">
+        <input id="po" placeholder="Post Office">
+        <input id="ps" placeholder="Police Station">
+        <input id="dist" placeholder="District">
+        <button onclick="placeOrder()">Place Order</button>
+        <div class="back" onclick="history.back()">← Back</div>
+    </div>
+
+    <script>
+        function placeOrder() {
+            let msg =
+                "🛒 New Order%0A" +
+                "Product: " + localStorage.getItem("p_name") + "%0A" +
+                "Price: " + localStorage.getItem("p_price") + "%0A%0A" +
+                "Name: " + name.value + "%0A" +
+                "PIN: " + pin.value + "%0A" +
+                "PO: " + po.value + "%0A" +
+                "PS: " + ps.value + "%0A" +
+                "District: " + dist.value;
+
+            window.open("https://wa.me/919395666204?text=" + msg, "_blank");
+        }
+    </script>
+
+</body>
+
+</html>
