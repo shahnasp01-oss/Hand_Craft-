@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Checkout</title>
+    <title>Checkout | HandNest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
         body {
             margin: 0;
             font-family: Arial;
-            background: #f5f7fb
+            background: #f5f7fb;
         }
 
         .container {
@@ -19,28 +19,51 @@
             background: #fff;
             padding: 18px;
             border-radius: 16px;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, .2)
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         input,
+        textarea,
         button {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
-            border-radius: 8px
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input,
+        textarea {
+            border: 1px solid #ccc;
         }
 
         button {
             background: #000;
             color: #fff;
             border: none;
-            cursor: pointer
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: none
         }
 
         .back {
             text-align: center;
+            margin-top: 10px;
             color: #007bff;
-            cursor: pointer
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            display: none;
         }
     </style>
 </head>
@@ -49,28 +72,80 @@
 
     <div class="container">
         <h2>Delivery Details</h2>
+
         <input id="name" placeholder="Full Name">
-        <input id="pin" placeholder="PIN Code">
-        <input id="po" placeholder="Post Office">
-        <input id="ps" placeholder="Police Station">
-        <input id="dist" placeholder="District">
+
+        <!-- PHONE: number only + auto focus PIN -->
+        <input id="phone" placeholder="Mobile Number" type="tel" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');
+             if(this.value.length==10) document.getElementById('pin').focus();">
+
+        <!-- PIN: number only -->
+        <input id="pin" placeholder="PIN Code" type="tel" maxlength="6"
+            oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+        <input id="dist" placeholder="District (Assam)">
+        <input id="block" placeholder="Block">
+        <input id="po" placeholder="Post Office (P.O)">
+
+        <textarea id="address" rows="3" placeholder="House No / Local Area / Landmark"></textarea>
+
+        <div class="error" id="err"></div>
+
         <button onclick="placeOrder()">Place Order</button>
         <div class="back" onclick="history.back()">← Back</div>
     </div>
 
     <script>
         function placeOrder() {
-            let msg =
-                "🛒 New Order%0A" +
+
+            const nameVal = document.getElementById("name").value.trim();
+            const phoneVal = document.getElementById("phone").value.trim();
+            const pinVal = document.getElementById("pin").value.trim();
+            const distVal = document.getElementById("dist").value.trim();
+            const blockVal = document.getElementById("block").value.trim();
+            const poVal = document.getElementById("po").value.trim();
+            const addressVal = document.getElementById("address").value.trim();
+            const errBox = document.getElementById("err");
+
+            // all required
+            if (!nameVal || !phoneVal || !pinVal || !distVal || !blockVal || !poVal || !addressVal) {
+                errBox.style.display = "block";
+                errBox.innerText = "Please fill all details";
+                return;
+            }
+
+            // phone validation
+            if (phoneVal.length !== 10) {
+                errBox.style.display = "block";
+                errBox.innerText = "Enter valid 10-digit mobile number";
+                return;
+            }
+
+            // pin validation
+            if (pinVal.length !== 6) {
+                errBox.style.display = "block";
+                errBox.innerText = "Enter valid 6-digit PIN code";
+                return;
+            }
+
+            errBox.style.display = "none";
+
+            const msg =
+                "🛒 New Order%0A%0A" +
                 "Product: " + localStorage.getItem("p_name") + "%0A" +
                 "Price: " + localStorage.getItem("p_price") + "%0A%0A" +
-                "Name: " + name.value + "%0A" +
-                "PIN: " + pin.value + "%0A" +
-                "PO: " + po.value + "%0A" +
-                "PS: " + ps.value + "%0A" +
-                "District: " + dist.value;
+                "Name: " + nameVal + "%0A" +
+                "Phone: " + phoneVal + "%0A" +
+                "PIN: " + pinVal + "%0A" +
+                "District: " + distVal + "%0A" +
+                "Block: " + blockVal + "%0A" +
+                "Post Office: " + poVal + "%0A" +
+                "Address: " + addressVal;
 
-            window.open("https://wa.me/919395666204?text=" + msg, "_blank");
+            window.open(
+                "https://wa.me/919395666204?text=" + msg,
+                "_blank"
+            );
         }
     </script>
 
